@@ -14,11 +14,12 @@ class Game():
         self.clock = pg.time.Clock()
 
         self.sprites = CameraGroup()
+        self.npcs = pg.sprite.Group()
 
-        self.player = Player(self.sprites, 'Player', 0,0, self.sprites)
-        NPC(self.sprites, 'Player', 4, 5)
-        NPC(self.sprites, 'Player', 2, 1)
-        NPC(self.sprites, 'Player', 7, 6)
+        self.player = Player(self.sprites, 'Player', 0,0, self.npcs)
+        NPC([self.sprites, self.npcs], 'Player', 4, 5, 1)
+        NPC([self.sprites, self.npcs], 'Player', 2, 1, 2)
+        NPC([self.sprites, self.npcs], 'Player', 7, 6, 3)
         
     def main(self):
         while True:
@@ -56,6 +57,7 @@ class CameraGroup(pg.sprite.Group):
             self.display_surface.blit(sprite.image, offset_pos)
 
             pg.draw.rect(pg.display.get_surface(), 'red', sprite.rect, 2)
+            pg.draw.rect(pg.display.get_surface(), 'blue', sprite.interactionHitbox, 2)
             self.display_surface.blit(sprite.image, sprite.rect)
 
 
