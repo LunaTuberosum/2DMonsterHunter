@@ -14,5 +14,3 @@ class Entity(pg.sprite.Sprite):
         self.image = self.idleDown
 
         self.rect = self.image.get_rect(topleft = (x*32, y*32))
-
-        self.placement = self.rect.y

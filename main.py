@@ -15,7 +15,7 @@ class Game():
 
         self.sprites = CameraGroup()
 
-        self.player = Player(self.sprites, 'Player', 0,0)
+        self.player = Player(self.sprites, 'Player', 0,0, self.sprites)
         NPC(self.sprites, 'Player', 4, 5)
         NPC(self.sprites, 'Player', 2, 1)
         NPC(self.sprites, 'Player', 7, 6)
@@ -46,12 +46,18 @@ class CameraGroup(pg.sprite.Group):
 
     def custom_draw(self, player):
 
+        
+
         self.offset.x = player.rect.centerx - self.half_width
         self.offset.y = player.rect.centery - self.half_height
 
-        for sprite in sorted(self.sprites(),key = lambda sprite: sprite.placement):
+        for sprite in sorted(self.sprites(),key = lambda sprite: sprite.rect.y):
             offset_pos = sprite.rect.topleft - self.offset
             self.display_surface.blit(sprite.image, offset_pos)
+
+            pg.draw.rect(pg.display.get_surface(), 'red', sprite.rect, 2)
+            self.display_surface.blit(sprite.image, sprite.rect)
+
 
 if __name__ == '__main__':
     game = Game()
