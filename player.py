@@ -35,12 +35,6 @@ class Player(Entity):
 
     def update(self):
         super().update()
-        
-        self.weapon.rect.x = self.rect.x + 6
-        if self.image == self.idleDown:
-            self.weapon.rect.y = self.rect.y - 1 
-        if self.image == self.idleUp:
-            self.weapon.rect.y = self.rect.y + 1 
 
         self.input()
 
@@ -72,6 +66,13 @@ class Player(Entity):
             self.hitbox.y += self.direction.y * self.speed
             self.collision('vertical')
 
+        self.weapon.rect.x = self.hitbox.x - 8
+        if self.image == self.idleUp:
+            self.weapon.rect.y = self.hitbox.y-10
+        else:
+            self.weapon.rect.y = self.hitbox.y-11
+        
+
         self.rect.center = self.hitbox.center
 
     def input(self):
@@ -102,7 +103,7 @@ class Player(Entity):
         else:
             self.running = False
 
-        if (keys[pg.K_LCTRL] and pg.time.get_ticks() - self.prevTick >= self.rollingTimer):
+        if (keys[pg.K_SPACE] and pg.time.get_ticks() - self.prevTick >= self.rollingTimer):
             self.prevTick = pg.time.get_ticks()
             self.roll = True
             self.rollCount = 0
@@ -140,6 +141,12 @@ class Weapon(pg.sprite.Sprite):
         self.weapon = weapon
         self.player = player
 
+        tempTxt = self.weapon.split('/')
+        self.type = tempTxt[0]
+
         self.image = pg.image.load(f'Assets/Weapons/{weapon}.png')
         self.rect = self.image.get_rect(topleft = (self.player.rect.topleft))
+        self.interactionHitbox = self.rect
+
+    def update(self):
         self.interactionHitbox = self.rect
