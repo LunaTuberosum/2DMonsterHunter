@@ -5,21 +5,22 @@ import sys
 
 from player import Player
 from npc import NPC
+from gameManager import GameManager
 
-class Game():
+class MainLoop():
+    
     def __init__(self):
         self.screen = pg.display.set_mode((1280,720))
         pg.display.set_caption('2D Monster Hunter')
         pg.init()
         self.clock = pg.time.Clock()
 
-        self.sprites = CameraGroup()
-        self.npcs = pg.sprite.Group()
-
-        self.player = Player(self.sprites, 'Player', 0,0, self.npcs)
-        NPC([self.sprites, self.npcs], 'Player', 4, 5, 1)
-        NPC([self.sprites, self.npcs], 'Player', 2, 1, 2)
-        NPC([self.sprites, self.npcs], 'Player', 7, 6, 3)
+        GameManager.obstacleSprites = YSortCameraGroup()
+        GameManager.npcSprites = pg.sprite.Group()
+        GameManager.folliageSprties = pg.sprite.Group()
+        self.player = Player([GameManager.obstacleSprites], 0,0)
+        NPC(GameManager.obstacleSprites, 3, 3)
+        
         
     def main(self):
         while True:
@@ -31,13 +32,13 @@ class Game():
 
             self.screen.fill('#9edb64')
 
-            self.sprites.custom_draw(self.player)
-            self.sprites.update()
+            GameManager.obstacleSprites.custom_draw(self.player)
+            GameManager.obstacleSprites.update()
             
             pg.display.update()
             self.clock.tick(60)
 
-class CameraGroup(pg.sprite.Group):
+class YSortCameraGroup(pg.sprite.Group):
     def __init__(self):
         super().__init__()
         self.display_surface = pg.display.get_surface()
@@ -56,11 +57,11 @@ class CameraGroup(pg.sprite.Group):
             offset_pos = sprite.rect.topleft - self.offset
             self.display_surface.blit(sprite.image, offset_pos)
 
-            pg.draw.rect(pg.display.get_surface(), 'red', sprite.rect, 2)
-            pg.draw.rect(pg.display.get_surface(), 'blue', sprite.interactionHitbox, 2)
+            pg.draw.rect(pg.display.get_surface(), 'red', sprite.hitbox, 2)
+            # pg.draw.rect(pg.display.get_surface(), 'blue', sprite.interactionHitbox, 2)
             self.display_surface.blit(sprite.image, sprite.rect)
 
 
 if __name__ == '__main__':
-    game = Game()
-    game.main()
+    mainLoop = MainLoop()
+    mainLoop.main()

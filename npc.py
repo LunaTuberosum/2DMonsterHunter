@@ -1,17 +1,10 @@
-from email.headerregistry import SingleAddressHeader
-from dialogDatabase import dialog
 import pygame as pg
-from entity import Entity
+from gameManager import GameManager
 
-class NPC(Entity):
-    def __init__(self, groups, imageRepo, x, y, npcID):
-        super().__init__(groups, imageRepo, x, y)
+class NPC(pg.sprite.Sprite):
+    def __init__(self, groups, x, y):
+        super().__init__(groups)
 
-        self.npcID = npcID
-
-    def talk(self):
-        for dialogText in dialog[self.npcID]:
-            print(dialogText)
-            input('>')
-
-        
+        self.image = pg.Surface((64,64))
+        self.rect = self.image.get_rect(topleft = (x*64, y*64))
+        self.hitbox = self.rect
